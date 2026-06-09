@@ -29,13 +29,15 @@ export default function CollegeCard({ college }: CollegeCardProps) {
     }
   };
 
-  const formatCurrency = (value: number | null | undefined) => {
+  const formatFees = (value: number | null | undefined) => {
     if (value === null || value === undefined) return "N/A";
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 0,
-    }).format(value);
+    if (value >= 100000) return `₹${(value / 100000).toFixed(1)}L`;
+    return `₹${(value / 1000).toFixed(0)}K`;
+  };
+
+  const formatPackage = (value: number | null | undefined) => {
+    if (value === null || value === undefined) return "N/A";
+    return `₹${value} LPA`;
   };
 
   return (
@@ -108,7 +110,7 @@ export default function CollegeCard({ college }: CollegeCardProps) {
             <div className="flex flex-col">
               <span className="text-[10px] text-muted-foreground leading-none">Annual Fees</span>
               <span className="text-xs font-bold text-foreground mt-0.5">
-                {formatCurrency(college.annualFees)}
+                {formatFees(college.annualFees)}
               </span>
             </div>
           </div>
@@ -120,7 +122,7 @@ export default function CollegeCard({ college }: CollegeCardProps) {
             <div className="flex flex-col">
               <span className="text-[10px] text-muted-foreground leading-none">Avg. Package</span>
               <span className="text-xs font-bold text-foreground mt-0.5">
-                {formatCurrency(college.avgPackage)}
+                {formatPackage(college.avgPackage)}
               </span>
             </div>
           </div>

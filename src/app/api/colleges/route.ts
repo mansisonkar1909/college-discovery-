@@ -12,10 +12,11 @@ export async function GET(req: NextRequest) {
 
     if (query.search) {
       where.OR = [
-        { name: { contains: query.search, mode: "insensitive" } },
-        { city: { contains: query.search, mode: "insensitive" } },
-        { state: { contains: query.search, mode: "insensitive" } },
-        { category: { contains: query.search, mode: "insensitive" } },
+        { name: { contains: query.search } },
+        { city: { contains: query.search } },
+        { state: { contains: query.search } },
+        { category: { contains: query.search } },
+        { description: { contains: query.search } },
       ];
     }
 

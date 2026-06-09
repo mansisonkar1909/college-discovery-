@@ -1,7 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import { College } from "@/types";
 
 export function useSaved() {
+  const { data: session } = useSession();
+
   return useQuery({
     queryKey: ["savedColleges"],
     queryFn: async (): Promise<College[]> => {
@@ -9,6 +12,7 @@ export function useSaved() {
       if (!res.ok) throw new Error("Failed to fetch saved colleges");
       return res.json();
     },
+    enabled: !!session,
   });
 }
 

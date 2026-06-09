@@ -1,19 +1,19 @@
-"use client";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { SessionProvider } from "next-auth/react";
-import { useState } from "react";
+import "./globals.css";
+import Providers from "@/components/Providers";
+import { Inter } from "next/font/google";
 
-// Wrap layout in providers
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata = {
+  title: "EduFind – College Discovery",
+  description: "Search, filter, and compare top Indian colleges",
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient());
   return (
-    <html lang="en">
-      <body>
-        <SessionProvider>
-          <QueryClientProvider client={queryClient}>
-            {children}
-          </QueryClientProvider>
-        </SessionProvider>
+    <html lang="en" data-scroll-behavior="smooth">
+      <body className={`${inter.className} antialiased`}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

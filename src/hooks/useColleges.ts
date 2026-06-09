@@ -7,7 +7,8 @@ export function useColleges(params: Record<string, string>) {
     queryFn: async () => {
       const res = await fetch(`/api/colleges?${query}`);
       if (!res.ok) throw new Error("Failed to fetch");
-      return res.json();
+      const data = await res.json();
+      return data.colleges;
     },
     staleTime: 30_000,
   });

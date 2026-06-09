@@ -7,23 +7,23 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as any,
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || "dummy-client-id",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "dummy-client-secret",
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
   session: {
     strategy: "jwt",
   },
   callbacks: {
-    session({ session, token }) {
-      if (token.sub && session.user) {
-        (session.user as any).id = token.sub;
+    async jwt({ token, user }) {
+      if (user) token.id = user.id;
+      return token;
+    },
+    async session({ session, token }) {
+      if (token?.id && session.user) {
+        (session.user as any).id = token.id;
       }
       return session;
     },
   },
-  pages: {
-    signIn: "/",
-  },
 };
-export default authOptions;

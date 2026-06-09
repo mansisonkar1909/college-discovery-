@@ -23,13 +23,26 @@ const statesList = [
   { code: "Karnataka", name: "Karnataka" },
   { code: "Tamil Nadu", name: "Tamil Nadu" },
   { code: "Rajasthan", name: "Rajasthan" },
+  { code: "Gujarat", name: "Gujarat" },
+  { code: "Uttar Pradesh", name: "Uttar Pradesh" },
+  { code: "West Bengal", name: "West Bengal" },
+  { code: "Telangana", name: "Telangana" },
+  { code: "Kerala", name: "Kerala" },
+  { code: "Madhya Pradesh", name: "Madhya Pradesh" },
+  { code: "Punjab", name: "Punjab" },
+  { code: "Odisha", name: "Odisha" },
 ];
 
 const categoryList = [
   { value: "", label: "All Streams" },
   { value: "Engineering", label: "Engineering" },
-  { value: "Science", label: "Science" },
+  { value: "Medical", label: "Medical" },
   { value: "Management", label: "Management" },
+  { value: "Science", label: "Science" },
+  { value: "Arts", label: "Arts & Humanities" },
+  { value: "Law", label: "Law" },
+  { value: "Design", label: "Design" },
+  { value: "Commerce", label: "Commerce" },
 ];
 
 const sortOptions = [
@@ -71,11 +84,8 @@ export default function CollegeFilters({ filters, onChange, onClear }: CollegeFi
   const formatCurrency = (val: string) => {
     if (!val) return "Any";
     const num = parseInt(val);
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 0,
-    }).format(num);
+    if (num >= 100000) return `₹${(num / 100000).toFixed(1)}L`;
+    return `₹${(num / 1000).toFixed(0)}K`;
   };
 
   return (
@@ -187,15 +197,15 @@ export default function CollegeFilters({ filters, onChange, onClear }: CollegeFi
           <input
             type="range"
             min="20000"
-            max="1200000"
+            max="2500000"
             step="20000"
             value={filters.maxFees || "1200000"}
             onChange={handleFeesChange}
             className="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-muted accent-primary focus:outline-none"
           />
           <div className="flex justify-between text-[9px] text-muted-foreground mt-1">
-            <span>$20,000</span>
-            <span>$1,200,000+</span>
+            <span>₹20K</span>
+            <span>₹25L+</span>
           </div>
         </div>
       </div>

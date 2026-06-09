@@ -80,12 +80,31 @@ export default function CollegeDetailPage({ params }: PageProps) {
 
   const formatCurrency = (value: number | null | undefined) => {
     if (value === null || value === undefined) return "N/A";
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 0,
-    }).format(value);
+    if (value >= 100000) return `₹${(value / 100000).toFixed(1)}L`;
+    return `₹${(value / 1000).toFixed(0)}K`;
   };
+
+  const formatPackage = (value: number | null | undefined) => {
+    if (value === null || value === undefined) return "N/A";
+    return `₹${value} LPA`;
+  };
+
+  // Parse JSON strings from DB into arrays
+  const programs: string[] = (() => {
+    try {
+      if (Array.isArray(college.programs)) return college.programs;
+      if (typeof college.programs === "string") return JSON.parse(college.programs);
+      return [];
+    } catch { return []; }
+  })();
+
+  const facilities: string[] = (() => {
+    try {
+      if (Array.isArray(college.facilities)) return college.facilities;
+      if (typeof college.facilities === "string") return JSON.parse(college.facilities);
+      return [];
+    } catch { return []; }
+  })();
 
   return (
     <div className="w-full pb-20">
@@ -229,9 +248,9 @@ export default function CollegeDetailPage({ params }: PageProps) {
                   <div className="bg-secondary/40 rounded-xl p-4 border border-border mt-6">
                     <h4 className="text-xs font-bold text-foreground uppercase mb-2">Highlights</h4>
                     <ul className="text-xs text-muted-foreground space-y-2 list-disc list-inside">
-                      <li>Offers {college.programs.length} premium academic majors</li>
-                      {college.facilities.length > 0 && (
-                        <li>Features modern campus facilities such as {college.facilities[0]} and {college.facilities[1]}</li>
+                      <li>Offers {programs.length} premium academic majors</li>
+                      {facilities.length > 0 && (
+                        <li>Features modern campus facilities such as {facilities[0]} and {facilities[1]}</li>
                       )}
                       {college.state && (
                         <li>Located in the state of {college.state}</li>
@@ -252,7 +271,7 @@ export default function CollegeDetailPage({ params }: PageProps) {
                   </p>
                   
                   <div className="flex flex-wrap gap-2 pt-2">
-                    {college.programs.map((program: string) => (
+                    {programs.map((program: string) => (
                       <div key={program} className="rounded-full bg-secondary text-secondary-foreground border border-border px-3.5 py-1.5 text-xs font-semibold shadow-xs">
                         {program}
                       </div>
@@ -272,7 +291,7 @@ export default function CollegeDetailPage({ params }: PageProps) {
                   </p>
 
                   <div className="flex flex-wrap gap-2 pt-2">
-                    {college.facilities.map((facility: string) => (
+                    {facilities.map((facility: string) => (
                       <div key={facility} className="rounded-full bg-accent/5 text-accent border border-accent/10 px-3.5 py-1.5 text-xs font-semibold shadow-xs">
                         {facility}
                       </div>
@@ -316,7 +335,7 @@ export default function CollegeDetailPage({ params }: PageProps) {
                       <span className="text-xs text-muted-foreground mt-0.5">Placement details</span>
                     </div>
                   </div>
-                  <span className="text-sm font-extrabold text-emerald-600">{formatCurrency(college.avgPackage)}</span>
+                  <span className="text-sm font-extrabold text-emerald-600">{formatPackage(college.avgPackage)}</span>
                 </div>
 
                 {/* User Rating */}
